@@ -46,8 +46,8 @@ class APIEmbedding:
             return []
 
         all_embeddings = []
-        # DashScope 每次最多处理 20 条文本
-        batch_size = 20
+        # DashScope 每次最多处理 10 条文本
+        batch_size = 10
         for i in range(0, len(texts), batch_size):
             batch = texts[i:i + batch_size]
             response = await self.client.embeddings.create(
