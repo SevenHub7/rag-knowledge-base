@@ -61,6 +61,8 @@ async def debug_config():
         "env_has_key": "DEEPSEEK_API_KEY" in os.environ,
         "chat_model": settings.chat_model,
         "embedding_model": settings.embedding_model,
+        "embedding_api_key_set": bool(settings.embedding_api_key),
+        "embedding_base_url": settings.embedding_base_url,
     }
 
 
@@ -77,6 +79,9 @@ async def startup():
     print(f"  CWD: {os.getcwd()}")
     print(f"  API 文档: http://{settings.host}:{settings.port}/docs")
     print(f"  前端界面: http://{settings.host}:{settings.port}/")
+    embed_status = f"已配置 ({settings.embedding_api_key[:8]}...)" if settings.embedding_api_key else "未配置"
+    print(f"  Embedding API: {embed_status}")
+    print(f"  Embedding 模型: {settings.embedding_model}")
     print(f"{'='*50}\n")
 
 

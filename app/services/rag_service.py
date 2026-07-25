@@ -5,7 +5,7 @@ from openai import AsyncOpenAI
 
 from app.config import settings
 from app.services.vector_store import vector_store
-from app.services.embedding_service import local_embed
+from app.services.embedding_service import api_embed
 from app.database import db
 
 
@@ -32,12 +32,12 @@ class RAGService:
         return self._client
 
     async def embed_text(self, text: str) -> list[float]:
-        """获取文本的向量表示（本地离线）"""
-        return local_embed.embed_one(text)
+        """获取文本的向量表示（DashScope API）"""
+        return await api_embed.embed_one(text)
 
     async def embed_batch(self, texts: list[str]) -> list[list[float]]:
-        """批量获取向量（本地离线）"""
-        return local_embed.embed_batch(texts)
+        """批量获取向量（DashScope API）"""
+        return await api_embed.embed_batch(texts)
 
     async def retrieve(self, kb_ids: list[str], query_text: str) -> list[dict]:
         """检索相关文档片段"""
@@ -102,7 +102,8 @@ class RAGService:
 1. 如果参考资料中有相关信息，请基于参考资料给出准确、详细的回答
 2. 在回答末尾用 [1]、[2] 等标注信息来源编号
 3. 如果参考资料中没有相关信息，请明确告知用户"当前知识库中未找到相关信息"，并给出可能的建议
-4. 保持回答简洁专业，避免冗余"""
+4. 保持回答简洁专业，避免冗余
+5. 不要使用任何 Markdown 格式符号（如 ** 加粗、* 斜体、# 标题等），使用纯文本格式回答"""
 
         if context:
             user_content = f"参考资料：\n\n{context}\n\n用户问题：{query}"

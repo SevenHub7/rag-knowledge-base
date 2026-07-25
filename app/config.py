@@ -10,7 +10,12 @@ class Settings(BaseSettings):
     deepseek_api_key: str = Field(default="")
     deepseek_base_url: str = Field(default="https://api.deepseek.com")
     chat_model: str = Field(default="deepseek-v4-flash")
-    embedding_model: str = Field(default="text-embedding-3-small")
+
+    # Embedding API（使用 DashScope 通义千问，OpenAI 兼容接口）
+    embedding_api_key: str = Field(default="")
+    embedding_base_url: str = Field(default="https://dashscope.aliyuncs.com/compatible-mode/v1")
+    embedding_model: str = Field(default="text-embedding-v3")
+    embedding_dimensions: int = Field(default=1024)
 
     # 应用
     app_name: str = Field(default="RAG 企业知识库")

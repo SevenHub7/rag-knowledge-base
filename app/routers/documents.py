@@ -33,7 +33,7 @@ async def process_document(doc_id: str, kb_id: str, file_path: str):
             db.update_document(doc_id, status="failed", error_message="分块后内容为空")
             return
 
-        # 3. 批量向量化（本地离线）
+        # 3. 批量向量化（DashScope API）
         embeddings = await rag_service.embed_batch(chunks)
 
         # 4. 构建元数据
