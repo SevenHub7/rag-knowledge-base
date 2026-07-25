@@ -1,5 +1,6 @@
 """RAG 核心服务 - 检索增强生成"""
 
+import httpx
 from openai import AsyncOpenAI
 
 from app.config import settings
@@ -22,9 +23,11 @@ class RAGService:
                 raise RuntimeError(
                     "未配置 DeepSeek API Key，请在 .env 文件中设置 DEEPSEEK_API_KEY"
                 )
+            # 使用自定义 httpx client 避免 openai 库传 proxies 参数与 httpx 0.28+ 不兼容
             self._client = AsyncOpenAI(
                 api_key=api_key,
                 base_url=settings.deepseek_base_url,
+                http_client=httpx.AsyncClient(),
             )
         return self._client
 
